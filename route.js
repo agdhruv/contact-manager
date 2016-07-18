@@ -20,6 +20,18 @@ router.route('/register')
  			else{
  				console.log(data);
  			}
+ 		})
+
+ 		var loginDetails = new login();
+ 		loginDetails.name = req.body.name;
+ 		loginDetails.password = req.body.password;
+ 		loginDetails.save(function(err,data){
+ 			if(err){
+ 				console.log(err);
+ 			}
+ 			else{
+ 				console.log(data);
+ 			}
  		});
  		res.json({status:"done"});
  	});
