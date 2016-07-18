@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({extended:true}));
 var routes = require('./route');
+	app.use('/api', routes);
 
 //Connect to db
 mongoose.connect('mongodb://localhost:27017/contact-manager', function(err){
