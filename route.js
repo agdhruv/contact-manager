@@ -96,8 +96,57 @@ router.route('/authenticate')
           res.send(user);
         })
       }
-    })
-  })
+    });
+  });
+
+  router.route('/addContact')
+    .post(function(req,res){
+    var verificationToken = req.headers['token'];
+
+    login.findOne({token:verificationToken}, function(err,data){
+      if(err){
+        res.send("Error in query");
+      }
+      else if(data === null || undefined || ''){
+        res.json("Token not found");
+      }
+      else{
+        var contactName = req.body.contactName,
+            contactEmail = req.body.contactEmail,
+            contactPhone = req.body.contactPhone;
+        user.update({
+          email_id:data.email_id
+        },{
+          $push : {"contacts" : {"name" : contactName,"email_id" : contactEmail, "phone" : contactPhone}}
+        },function(err,result){
+          if(err){console.log(err);}
+          else{res.send(result);}
+        });
+      }
+    });
+  });
+
+  router.route('/getContact')
+    .post(function(req,res){
+        var verificationToken = req.headers['token'];
+
+        login.findOne({token:verificationToken}, function(err,data){
+          if(err){
+            res.send("Error in query");
+          }
+          else if(data === null || undefined || ''){
+            res.json("Token not found");
+          }
+          else{
+            user.findOne({
+              email_id:data.email_id
+            },function(err,result){
+              if(err){console.log(err);}
+              else{res.send(result);}
+            });
+          }
+        });
+    });
 
 module.exports = router;
 
