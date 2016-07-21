@@ -140,13 +140,36 @@ router.route('/authenticate')
           else{
             user.findOne({
               email_id:data.email_id
-            },function(err,result){
+            },{contacts : 1, _id : 0},function(err,result){
               if(err){console.log(err);}
               else{res.send(result);}
             });
           }
         });
     });
+
+    router.route('/deleteContact')
+      .post(function(req,res){
+        var verificationToken = req.headers['token'];
+
+        login.findOne({token:verificationToken}, function(err,data){
+          if(err){
+            res.send("Error in query");
+          }
+          else if(data === null || undefined || ''){
+            res.json("Token not found");
+          }
+          else{
+            var contactNameToDelete = req.body.delName;
+            user.update({
+              email_id : data.email_id
+            },{$pull : {contacts :{name: contactNameToDelete}}},function(err,result){
+              if(err){console.log(err);}
+              else{res.send(result);}
+            })
+          }
+        });
+      });
 
 module.exports = router;
 
