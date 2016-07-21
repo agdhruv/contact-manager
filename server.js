@@ -1,8 +1,9 @@
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
-var morgan      = require('morgan');
-var jwt    = require('jsonwebtoken');
+var morgan = require('morgan');
+	app.use(morgan('dev'));
+var jwt = require('jsonwebtoken');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 	app.use(bodyParser.json());
@@ -19,7 +20,6 @@ mongoose.connect('mongodb://localhost:27017/contact-manager', function(err){
 		console.log(err);
 	}
 });
-app.use(morgan('dev'));
 
 app.get('/',function(req,res) {
 	res.send("Running");
