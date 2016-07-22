@@ -190,6 +190,18 @@ router.route('/login')
                 email_id : data.email_id
               },{
                 $pull : {"contacts" : { "email_id" : emailToUpdate}}
+              },function(err,result){
+                if(err){console.log(err);}
+                else{
+                  user.update({
+                  email_id : data.email_id
+                  },{
+                    $push : {"contacts" : {"name" : updatedName,"email_id" : updatedEmail, "phone" : updatedPhone}}
+                  },function(err,resultNew){
+                    if(err){console.log(err);}
+                    else{res.send(resultNew);}
+                  });
+                }
               });
             }
           });
