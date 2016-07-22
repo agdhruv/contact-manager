@@ -39,7 +39,7 @@ router.route('/register')
  	});
 
 
-router.route('/authenticate')
+router.route('/login')
  	.post(function(req,res){
 	 		//find the user
 		  	login.findOne({
@@ -170,6 +170,54 @@ router.route('/authenticate')
           }
         });
       });
+
+      router.route('/updateContact')
+        .post(function(req,res){
+          var verificationToken = req.headers['token'];
+          login.findOne({token:verificationToken}, function(err,data){
+            if(err){
+              res.send("Error in query");
+            }
+            else if(data === null || undefined || ''){
+              res.json("Token not found");
+            }
+            else{
+              var emailToUpdate = req.body.emailToUpdate,
+                  updatedName = req.body.newName,
+                  updatedEmail = req.body.newEmail,
+                  updatedPhone = req.body.newPhone;
+              user.update({
+                email_id : data.email_id
+              },{
+                $pull : {"contacts" : { "email_id" : emailToUpdate}}
+              });
+            }
+          });
+        });
+
+      router.route('/logout')
+        .post(function(req,res){
+          var verificationToken = req.headers['token'];
+
+          login.findOne({token:verificationToken}, function(err,data){
+            if(err){
+              res.send("Error in query");
+            }
+            else if(data === null || undefined || ''){
+              res.json("Token not found");
+            }
+            else{
+              login.update({
+                token : verificationToken
+              },{
+                $unset : {"token" : ""}
+              },function(err,result){
+                if(err){console.log(err);}
+                else{res.send(result);}
+              });
+            }
+          });
+        });
 
 module.exports = router;
 
