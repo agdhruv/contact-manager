@@ -10,7 +10,7 @@ var login = require('./Models/login.js');
 var user = require('./Models/user.js');
 
 router.route('/register')
- 	.post(function( req , res){
+ 	.post(function(req , res){
  		var userDetails = new user();
  		userDetails.name = req.body.name;
  		userDetails.email_id = req.body.email;
@@ -22,7 +22,7 @@ router.route('/register')
  			else{
  				console.log(data);
  			}
- 		})
+ 		});
 
  		var loginDetails = new login();
  		loginDetails.email_id = req.body.email;
@@ -56,7 +56,8 @@ router.route('/login')
 			        console.log(user.password);
 			        console.log(req.body.password);
         			res.json({ success: false, message: 'Authentication failed. Wrong password.' });
-      			}else{
+      			}
+            else{
 			        // if user is found and password is right
 			        // create a token
         			var token = jwt.sign(user,'superSecret');
@@ -232,9 +233,6 @@ router.route('/login')
         });
 
 module.exports = router;
-
-
-
 
 
 

@@ -21,8 +21,11 @@ mongoose.connect('mongodb://localhost:27017/contact-manager', function(err){
 	}
 });
 
+app.use(express.static(__dirname + '/Public', {redirect : false}));
+
 app.get('/',function(req,res) {
 	res.send("Running");
 });//send home page
 
 app.listen(4000);//start server
+console.log("sever listening on port 4000!");
